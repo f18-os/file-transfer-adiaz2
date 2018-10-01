@@ -5,7 +5,7 @@ sys.path.append("../lib")       # for params
 import os, socket, params
 
 switchesVarDefaults = (
-    (('-l', '--listenPort') ,'listenPort', 50017),
+    (('-l', '--listenPort') ,'listenPort', 50007),
     (('-d', '--debug'), "debug", False), # boolean (set if present)
     (('-?', '--usage'), "usage", False), # boolean (set if present)
     )
@@ -39,31 +39,30 @@ while True:
             return_message = payload
             split_payload = payload.decode().split(' ')
             if split_payload[0] == 'put':
-                print('put is found (server)')
                 write_file = True
                 if os.path.isfile(split_payload[1]):
-                    print('file is being sent')
                     framedSend(sock, b'overwrite', debug)
                     print('overwrite sent')
                     choice = framedReceive(sock, debug)
-                    if choice:
-                        print(choice)
-                    if choice == b'y':
-                        print('choice was y')
-                    else:
+                    print(choice)
+                    if choice != b'y':
                         write_file = False
                 else:
                     framedSend(sock, b'', debug)
                     print('no file found')
-                print(write_file)
                 if write_file:
-                    print('time to write this DAMN file')
+                    print('awaiting file info')
                     file_info = framedReceive(sock, debug)
-                    split_file_info = file_info.split(':::')
-                    f = open(split_payload[0], 'w')
-                    f.write(split_payload[1])
-                    f.close()
-                    return_message = b'Transfer Successful!'
+                    print('file_info ' + str(file_info))
+                    if file_info:
+                        print('file_info: ' + str(file_info))
+                        split_file_info = file_info.decode().split(':::')
+                        f = open(split_file_info[0], 'w')
+                        f.write(split_file_info[1])
+                        f.close()
+                        return_message = b'Transfer Successful!'
                 else:
+                    print(write_file)
                     return_message = b'Transfer Cancelled!'
+            print('return_message ' + str(return_message))
             framedSend(sock, return_message, debug)

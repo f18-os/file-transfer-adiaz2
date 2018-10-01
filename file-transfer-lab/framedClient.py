@@ -10,7 +10,7 @@ from framedSock import framedSend, framedReceive
 
 
 switchesVarDefaults = (
-    (('-s', '--server'), 'server', "127.0.0.1:50017"),
+    (('-s', '--server'), 'server', "127.0.0.1:50007"),
     (('-d', '--debug'), "debug", False), # boolean (set if present)
     (('-?', '--usage'), "usage", False), # boolean (set if present)
     )
@@ -59,11 +59,9 @@ while True:
     message = input('>>>')
     split_message = message.split(' ')
     if split_message[0] == 'put':
-        print('condition: ' + str(os.path.isfile(split_message[1])))
         if os.path.isfile(split_message[1]):
             framedSend(s, bytes(message, 'utf-8'), debug)
             error = framedReceive(s, debug)
-            print('error' + str(error))
             write_file = True
             if error == b'overwrite':
                 while(True):
@@ -82,6 +80,7 @@ while True:
     b_message = bytes(message, 'utf-8')
     framedSend(s, b_message, debug)
     print(b_message)
+    framedSend(s, b_message, debug)
     print("received:", framedReceive(s, debug))
         
     
