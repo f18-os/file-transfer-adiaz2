@@ -76,10 +76,9 @@ while True:
                 f = open(split_message[1], 'r')
                 contents = f.read()
                 f.close()
-                message = split_message[1] + ':::' + contents
+                framedSend(s, bytes(split_message[1], 'utf-8'), debug)
+                message = contents
     b_message = bytes(message, 'utf-8')
-    framedSend(s, b_message, debug)
-    print(b_message)
     framedSend(s, b_message, debug)
     print("received:", framedReceive(s, debug))
         
