@@ -16,11 +16,8 @@ def framedReceive(sock, debug=0):
     while True:
          if (state == "getLength"):
              match = re.match(b'([^:]+):([\S\s]*)', rbuf) # look for colon
-             print(match)
              if match:
-                  print(match.groups())
                   lengthStr, rbuf = match.groups()
-                  print('new rbuf: ' + str(rbuf))
                   try: 
                        msgLength = int(lengthStr)
                   except:
@@ -34,9 +31,7 @@ def framedReceive(sock, debug=0):
                  rbuf = rbuf[msgLength:]
                  return payload
          r = sock.recv(100)
-         print('r: ' + str(r))
          rbuf += r
-         print('rbuf: ' + str(rbuf))
          if len(r) == 0:
              if len(rbuf) != 0:
                  print("FramedReceive: incomplete message. \n  state=%s, length=%d, rbuf=%s" % (state, msgLength, rbuf))

@@ -5,7 +5,7 @@ sys.path.append("../lib")       # for params
 import os, socket, params
 
 switchesVarDefaults = (
-    (('-l', '--listenPort') ,'listenPort', 50007),
+    (('-l', '--listenPort') ,'listenPort', 50001),
     (('-d', '--debug'), "debug", False), # boolean (set if present)
     (('-?', '--usage'), "usage", False), # boolean (set if present)
     )
@@ -52,10 +52,13 @@ while True:
                     file_contents = framedReceive(sock, debug)
                     if not file_name:
                         sys.exit(0) 
-#                    print('file_info: ' + str(file_info))
-                    if file_name or file_contents:
+                    if file_name and file_contents:
+                        if os.path.isfile(file_name.decode()): #rename_file
+                            file_name = file_name.decode().split('.')
+                            file_name[-2] = file_name[-2] + '_copy'
+                            file_name = '.'.join(file_name)
                         f = open(str(file_name), 'w')
-                        f.write(str(file_contents))
+                        f.write(str(file_contents.decode()))
                         f.close()
                         return_message = b'Transfer Successful!'
                     else:
