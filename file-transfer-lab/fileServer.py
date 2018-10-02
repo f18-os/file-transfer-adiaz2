@@ -50,9 +50,7 @@ while True:
                 if write_file:
                     file_name = framedReceive(sock, debug)
                     file_contents = framedReceive(sock, debug)
-                    if not file_name:
-                        sys.exit(0) 
-                    if file_name and file_contents:
+                    if file_name:
                         if os.path.isfile(file_name.decode()): #rename_file
                             file_name = file_name.decode().split('.')
                             file_name[-2] = file_name[-2] + '_copy'

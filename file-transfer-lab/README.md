@@ -1,3 +1,4 @@
+# File Transfer Lab
 This is a simple program that allows a Client to send files to a Server using
 the 'put' command. If the Server already contains a file under that name, the
 file will be stored as a copy. For example, if the Client tries to transfer a file
