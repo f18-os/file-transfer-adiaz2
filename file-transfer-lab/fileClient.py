@@ -65,21 +65,23 @@ while True:
             write_file = True
             if error == b'overwrite':
                 while(True):
-                    overwrite = input('This file already exists, overwrite the current file? (y/n)\n')
+                    overwrite = input('A file with the same name already exists in the server, save as a copy? (y/n)\n')
                     if overwrite == 'y':
                         break
                     elif overwrite == 'n':
                         write_file = False
                         break
                 framedSend(s, bytes(overwrite, 'utf-8'), debug)
+        
             if write_file:
                 f = open(split_message[1], 'r')
                 contents = f.read()
                 f.close()
                 framedSend(s, bytes(split_message[1], 'utf-8'), debug)
                 message = contents
+        else: #if file does not exist, ask the user for another input
+            print('The file ' + split_message[1] + ' does not exist')
+            continue
     b_message = bytes(message, 'utf-8')
     framedSend(s, b_message, debug)
     print("received:", framedReceive(s, debug))
-        
-    
